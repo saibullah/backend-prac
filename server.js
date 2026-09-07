@@ -1,32 +1,34 @@
-const express = require("express")
-const mongoos = require("mongoose")
+const express = require('express')
 const app = express()
-const userRouter = require('./routes/route')
-const dns = require("dns");
-dns.setServers(["8.8.8.8", "1.1.1.1"]);
-app.use(express.json());
+const mongoose = require("mongoose")
 require("dotenv").config()
-const auth = require("./routes/authroute")
+const dns = require('dns')
+dns.setServers(["8.8.8.8","1.1.1.1"])
+const cors = require('cors')
 
-mongoos.connect(process.env.MONGO_DB_URL)
-.then (()=>{
-    console.log("connected")
+const authRouter = require('./routes/authrouter')
+const productRoute = require('./routes/productroute')
+const orderRouter = require('./routes/orderroute')
+app.use(express.json())
+app.use(cors()) 
+mongoose.connect(process.env.MONGODB_URL)
+.then(()=>{
+    console.log("mongodb connected");
+}).catch((err)=>{
+    console.log("not connected");   
 })
-.catch((err)=>{
-    console.log(err);
-    
-})
-app.use("/api/user" , userRouter)
-app.use("/api/auth", auth )
 
-app.get("/",(req,res)=>{
-    res.send("rest api running")
-})
+//All routes here
+app.use('/api/auth' , authRouter)
+app.use('/api/product' , productRoute)
+app.use('/api/orders' ,orderRouter )
 
 
+// app.get("/" ,(req,res)=>{
+//     res.status(200).json("running")
+// })
 
-
-app.listen(4000,(req,res)=>{
-    console.log("running");
+app.listen(5000 , (req,res)=>{
+    console.log("Server running 5000");
     
 })
