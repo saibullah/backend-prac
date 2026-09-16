@@ -27,8 +27,8 @@ app.use('/api/orders' ,orderRouter )
 // app.get("/" ,(req,res)=>{
 //     res.status(200).json("running")
 // })
+const PORT = process.env.PORT || 5000;
 
-app.listen(5000 , (req,res)=>{
-    console.log("Server running 5000");
-    
-})
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
